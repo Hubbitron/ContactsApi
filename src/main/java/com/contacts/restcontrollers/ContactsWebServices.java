@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -20,7 +22,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.ByteArrayInputStream;
 import com.contacts.model.Contact;
 import com.contacts.service.ContactsService;
@@ -72,19 +77,38 @@ public class ContactsWebServices {
 		return new ResponseEntity<Contact>(contact, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> insert(@RequestBody String json) throws JsonParseException, JsonMappingException, IOException {
+	@PostMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> insert(
+			@RequestParam(value = "file") MultipartFile file,
+			@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SerialException, SQLException {
 		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
+		
+		MultipartFile multipartFile = file;
+		
+		byte[] profilePicBytes = multipartFile.getBytes();
+		SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
+		
+		contact.setProfilePic(profilePicBlob);
 		
 		long recordsInserted = this.contactsService.insertContact(contact);
 		
 		return new ResponseEntity<Void>(HttpStatus.CREATED);
 	}
 	
-	@PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Contact> update(@RequestBody String json) throws JsonParseException, JsonMappingException, IOException {
+	@PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Contact> update (
+		@RequestParam( value = "file") MultipartFile file,
+		@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SQLException {
+		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
+		
+		MultipartFile multipartFile = file;
+			
+		byte[] profilePicBytes = multipartFile.getBytes();
+		SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
+		
+		contact.setProfilePic(profilePicBlob);
 		
 		long recordsUpdated = this.contactsService.updateContact(contact);
 		

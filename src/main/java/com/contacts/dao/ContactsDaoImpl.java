@@ -56,12 +56,18 @@ public class ContactsDaoImpl implements ContactsDao {
 	public long updateContact(Contact contact) {
 		long recordsUpdated = 0;
 		
-		String sql = "update contacts set last_name = ?, first_name = ?, dob = ? where id = ?";
+		String sql = "update contacts "
+				+ "set last_name = ?,"
+				+ " first_name = ?,"
+				+ " dob = ?, "
+				+ " profile_pic = ?,"
+				+ "where id = ?";
 		
 		Object[] params = {
 			contact.getLastName(),
 			contact.getFirstName(),
 			contact.getDob(),
+			contact.getProfilePic(),
 			contact.getId()
 		};
 		recordsUpdated = this.jdbcTemplate.update(sql, params);
@@ -71,13 +77,19 @@ public class ContactsDaoImpl implements ContactsDao {
 	@Override
 	public long insertContact(Contact contact) {
 		long recordsInserted = 0;
-		String sql = "insert into contacts (id, last_name, first_name, dob) values (?, ?, ?, ?)";
+		String sql = "insert into contacts (id,"
+				+ " last_name,"
+				+ " first_name,"
+				+ " dob,"
+				+ " profile_pic = ? "
+				+ ") values (?, ?, ?, ?, ?)";
 				
 		Object[] params = {
 			this.getNextId("contacts", "id"),
 			contact.getLastName(),
 			contact.getFirstName(),
-			contact.getDob()
+			contact.getDob(),
+			contact.getProfilePic()
 		};
 		recordsInserted = this.jdbcTemplate.update(sql, params);
 		return recordsInserted;
