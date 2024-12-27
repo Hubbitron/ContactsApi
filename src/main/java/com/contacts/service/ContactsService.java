@@ -1,5 +1,6 @@
 package com.contacts.service;
 
+import java.sql.Blob;
 import java.util.List;
 
 import com.contacts.model.Contact;
@@ -14,4 +15,7 @@ public interface ContactsService {
 	long insertContact(Contact contact);
 	
 	long deleteContact(long id);
+	
+	Blob downloadProfilePic(long id);
+	
 }

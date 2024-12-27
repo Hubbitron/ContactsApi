@@ -1,5 +1,6 @@
 package com.contacts.service;
 
+import java.sql.Blob;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,11 @@ public class ContactsServiceImpl implements ContactsService {
 	@Override
 	public long deleteContact(long id) {
 		return this.contactsDao.deleteContact(id);
+	}
+
+	@Override
+	public Blob downloadProfilePic(long id) {
+		return this.contactsDao.downloadProfilePic(id);
 	}
 
 }

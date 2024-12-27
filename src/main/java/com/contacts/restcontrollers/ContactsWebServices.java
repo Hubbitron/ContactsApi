@@ -1,9 +1,14 @@
 package com.contacts.restcontrollers;
 
 import java.io.IOException;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.io.ByteArrayInputStream;
 import com.contacts.model.Contact;
 import com.contacts.service.ContactsService;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -31,6 +36,19 @@ public class ContactsWebServices {
 	
 	@Autowired
 	ContactsService contactsService;
+	
+	@GetMapping(value = "/getProfilePic/{id}")
+	public ResponseEntity<Resource> getProfilePic(@PathVariable Long id) throws SQLException {
+		Blob profilePic = this.contactsService.downloadProfilePic(id);
+		byte[] profilePicBytes = profilePic.getBytes(1, (int)profilePic.length());
+		profilePic.free();
+		InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(profilePicBytes));
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_MIXED);
+		headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+		headers.add("Content-Disposition", "inline; filename = download.png");
+		return ResponseEntity.ok().headers(headers).contentLength(profilePicBytes.length).body(resource);
+	}
 	
 	@GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Contact>> get() {

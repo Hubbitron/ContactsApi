@@ -1,5 +1,7 @@
 package com.contacts;
 
+import java.sql.Blob;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,14 +25,14 @@ class ContactsApiApplicationTests {
 	@Test
 	public void getContact() {
 		Contact contact = this.contactsService.getOneContact(2);
-		System.out.println(contact.getId() + " " + contact.getLastName());
+		System.out.println(contact.getDob());
 	}
 	
 	@Test
 	public void getContacts() {
 		List<Contact> contactList = this.contactsService.getAllContacts();
 		for (Contact contact : contactList) {
-			System.out.println(contact.getId() + " " + contact.getLastName());
+			System.out.println(contact.getId() + " " + contact.getLastName() + " " + contact.getFirstName());
 			
 		}
 	}
@@ -39,7 +41,9 @@ class ContactsApiApplicationTests {
 	void updateContact() {
 		Contact contact = new Contact();
 		contact.setId(2);
-		contact.setLastName("Termite");
+		contact.setDob(new Date());
+		contact.setLastName("Jerk");
+		contact.setFirstName("off");
 		System.out.println(this.contactsService.updateContact(contact));
 	}
 	
@@ -52,5 +56,12 @@ class ContactsApiApplicationTests {
 	
 	@Test void deleteContact() {
 		System.out.println(this.contactsService.deleteContact(6));
+	}
+	
+	@Test
+	public void getProfilePic() {
+		Blob pfp = this.contactsService.downloadProfilePic(1);
+		System.out.println(pfp);
+		
 	}
 }
