@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ import com.contacts.service.ContactsService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -98,17 +100,23 @@ public class ContactsWebServices {
 	
 	@PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Contact> update (
-		@RequestParam( value = "file") MultipartFile file,
+		@RequestParam( value = "file" ) Optional<MultipartFile> file,
 		@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SQLException {
 		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
 		
-		MultipartFile multipartFile = file;
-			
-		byte[] profilePicBytes = multipartFile.getBytes();
-		SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
+		MultipartFile multipartFile = null;
 		
-		contact.setProfilePic(profilePicBlob);
+		if (file.isPresent()) {
+			multipartFile = file.get();
+			
+			byte[] profilePicBytes = multipartFile.getBytes();
+			SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
+			
+			contact.setProfilePic(profilePicBlob);
+		}
+			
+
 		
 		long recordsUpdated = this.contactsService.updateContact(contact);
 		

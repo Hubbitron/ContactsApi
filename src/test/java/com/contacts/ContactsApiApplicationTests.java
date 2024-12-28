@@ -32,7 +32,7 @@ class ContactsApiApplicationTests {
 	public void getContacts() {
 		List<Contact> contactList = this.contactsService.getAllContacts();
 		for (Contact contact : contactList) {
-			System.out.println(contact.getId() + " " + contact.getLastName() + " " + contact.getFirstName());
+			System.out.println(contact.getFirstName());
 			
 		}
 	}
@@ -41,16 +41,13 @@ class ContactsApiApplicationTests {
 	void updateContact() {
 		Contact contact = new Contact();
 		contact.setId(2);
-		contact.setDob(new Date());
-		contact.setLastName("Jerk");
-		contact.setFirstName("off");
-		System.out.println(this.contactsService.updateContact(contact));
-	}
+		contact.setMiddleName("Bronlonius");
+		System.out.println(contact.getMiddleName());	}
 	
 	@Test
 	void insertContact() {
 		Contact contact = new Contact();
-		contact.setLastName("Polp");
+		contact.setLastName("Test");
 		System.out.println(this.contactsService.insertContact(contact));
 	}
 	

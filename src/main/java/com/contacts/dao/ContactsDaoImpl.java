@@ -30,7 +30,7 @@ public class ContactsDaoImpl implements ContactsDao {
 		List<Contact> contactList = new ArrayList<Contact>();
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();		
-		String sql = "select id, last_name, first_name, dob from contacts ";
+		String sql = "select id, last_name, middle_name, first_name, dob from contacts ";
 		if (id > 0) {
 			sql += "where id = :id";
 			paramMap.put("id", id);
@@ -44,6 +44,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			
 			contact.setId(Long.parseLong(row.get("id").toString()));
 			contact.setLastName(row.get("last_name").toString());
+			contact.setMiddleName(row.get("middle_name").toString());
 			contact.setFirstName(row.get("first_name").toString());
 			contact.setDob((Date)row.get("dob"));
 			
@@ -57,7 +58,8 @@ public class ContactsDaoImpl implements ContactsDao {
 		long recordsUpdated = 0;
 		
 		String sql = "update contacts "
-				+ "set last_name = ?,"
+				+ " set last_name = ?,"
+				+ " middle_name = ?,"
 				+ " first_name = ?,"
 				+ " dob = ?, "
 				+ " profile_pic = ?"
@@ -65,6 +67,7 @@ public class ContactsDaoImpl implements ContactsDao {
 		
 		Object[] params = {
 			contact.getLastName(),
+			contact.getMiddleName(),
 			contact.getFirstName(),
 			contact.getDob(),
 			contact.getProfilePic(),
@@ -79,14 +82,16 @@ public class ContactsDaoImpl implements ContactsDao {
 		long recordsInserted = 0;
 		String sql = "insert into contacts (id,"
 				+ " last_name,"
+				+ " middle_name,"
 				+ " first_name,"
 				+ " dob,"
 				+ " profile_pic = ? "
-				+ ") values (?, ?, ?, ?, ?)";
+				+ " values (?, ?, ?, ?, ?, ?))";
 				
 		Object[] params = {
 			this.getNextId("contacts", "id"),
 			contact.getLastName(),
+			contact.getMiddleName(),
 			contact.getFirstName(),
 			contact.getDob(),
 			contact.getProfilePic()

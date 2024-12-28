@@ -10,6 +10,7 @@ public class Contact {
 	long id;
 	String lastName;
 	String firstName;
+	String middleName;
 	Date dob;
 	SerialBlob profilePic;
 	Blob tempBlob; //temporary field for downloads
@@ -26,6 +27,12 @@ public class Contact {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	} 
+	public String getMiddleName() {
+		return middleName;
+	}
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
 	public String getFirstName() {
 		return firstName;
 	}
