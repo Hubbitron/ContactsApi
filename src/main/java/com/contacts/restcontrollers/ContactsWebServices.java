@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import com.contacts.model.Contact;
+import com.contacts.model.State;
 import com.contacts.service.ContactsService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -58,9 +59,15 @@ public class ContactsWebServices {
 	}
 	
 	@GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Contact>> get() {
+	public ResponseEntity<List<Contact>> getContacts() {
 		List<Contact> arrayList = this.contactsService.getAllContacts();
 		return new ResponseEntity<List<Contact>>(arrayList, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/getStates", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<State>> getStates() {
+		List<State> arrayList = this.contactsService.getStates();
+		return new ResponseEntity<List<State>>(arrayList, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/getSingle/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

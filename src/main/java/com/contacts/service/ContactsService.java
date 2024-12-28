@@ -4,6 +4,7 @@ import java.sql.Blob;
 import java.util.List;
 
 import com.contacts.model.Contact;
+import com.contacts.model.State;
 
 public interface ContactsService {
 	List<Contact> getAllContacts();
@@ -17,6 +18,8 @@ public interface ContactsService {
 	long deleteContact(long id);
 	
 	Blob downloadProfilePic(long id);
+	
+	List<State> getStates();
 	
 	
 	

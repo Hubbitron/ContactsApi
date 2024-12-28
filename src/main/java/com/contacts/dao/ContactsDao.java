@@ -4,6 +4,7 @@ import java.sql.Blob;
 import java.util.List;
 
 import com.contacts.model.Contact;
+import com.contacts.model.State;
 
 public interface ContactsDao {
 	List<Contact> getContacts(long id);
@@ -15,5 +16,7 @@ public interface ContactsDao {
 	long deleteContact(long id);
 	
 	Blob downloadProfilePic(long id);
+	
+	List<State> getStates();
 
 }

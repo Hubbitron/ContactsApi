@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.contacts.model.Contact;
+import com.contacts.model.State;
 
 @Repository
 public class ContactsDaoImpl implements ContactsDao {
@@ -30,7 +31,7 @@ public class ContactsDaoImpl implements ContactsDao {
 		List<Contact> contactList = new ArrayList<Contact>();
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();		
-		String sql = "select id, last_name, middle_name, first_name, dob from contacts ";
+		String sql = "select id, last_name, middle_name, first_name, dob, state from contacts ";
 		if (id > 0) {
 			sql += "where id = :id";
 			paramMap.put("id", id);
@@ -142,5 +143,28 @@ public class ContactsDaoImpl implements ContactsDao {
 		Contact firstContact = contactList.get(0);
 		Blob pfp = firstContact.getTempBlob();
 		return pfp;
+	}
+
+	@Override
+	public List<State> getStates() {
+		List<State> stateList = new ArrayList<State>();
+			
+		String sql = "select id, state_abbr, state_name from state ";
+		
+		sql += "order by state_name asc";
+		
+		List<Map<String, Object>> rows = this.jdbcTemplate.queryForList(sql);
+		
+		for (Map<String, Object> row: rows) {
+			State state = new State();
+			
+			state.setId(Long.parseLong(row.get("id").toString()));
+			state.setStateAbbr(row.get("state_abbr").toString());
+			state.setStateName(row.get("state_name").toString());
+;
+			
+			stateList.add(state);
+		}
+		return stateList;
 	}
 }

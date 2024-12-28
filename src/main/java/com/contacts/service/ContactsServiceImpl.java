@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.contacts.dao.ContactsDao;
 import com.contacts.model.Contact;
+import com.contacts.model.State;
 
 @Service("contactsService")
 public class ContactsServiceImpl implements ContactsService {
@@ -45,6 +46,11 @@ public class ContactsServiceImpl implements ContactsService {
 	@Override
 	public Blob downloadProfilePic(long id) {
 		return this.contactsDao.downloadProfilePic(id);
+	}
+
+	@Override
+	public List<State> getStates() {
+		return this.contactsDao.getStates();
 	}
 
 }

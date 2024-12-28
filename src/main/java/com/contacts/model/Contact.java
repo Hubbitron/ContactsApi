@@ -1,6 +1,7 @@
 package com.contacts.model;
 
 import java.sql.Blob;
+
 import java.util.Date;
 
 import javax.sql.rowset.serial.SerialBlob;
