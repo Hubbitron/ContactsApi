@@ -60,8 +60,8 @@ public class ContactsDaoImpl implements ContactsDao {
 				+ "set last_name = ?,"
 				+ " first_name = ?,"
 				+ " dob = ?, "
-				+ " profile_pic = ?,"
-				+ "where id = ?";
+				+ " profile_pic = ?"
+				+ " where id = ?";
 		
 		Object[] params = {
 			contact.getLastName(),

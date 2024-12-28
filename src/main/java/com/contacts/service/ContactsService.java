@@ -18,4 +18,6 @@ public interface ContactsService {
 	
 	Blob downloadProfilePic(long id);
 	
+	
+	
 }
