@@ -13,6 +13,7 @@ public class Contact {
 	String firstName;
 	String middleName;
 	Date dob;
+	long stateId;
 	SerialBlob profilePic;
 	Blob tempBlob; //temporary field for downloads
 	
@@ -45,6 +46,12 @@ public class Contact {
 	}
 	public void setDob(Date dob) {
 		this.dob = dob;
+	}
+	public long getStateId() {
+		return stateId;
+	}
+	public void setStateId(long stateId) {
+		this.stateId = stateId;
 	}
 	public SerialBlob getProfilePic() {
 		return profilePic;
