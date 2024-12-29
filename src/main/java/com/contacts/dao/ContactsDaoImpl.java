@@ -90,8 +90,8 @@ public class ContactsDaoImpl implements ContactsDao {
 				+ " first_name,"
 				+ " dob,"
 				+ " state_id,"
-				+ " profile_pic = ? "
-				+ " values (?, ?, ?, ?, ?, ?, ?))";
+				+ " profile_pic"
+				+ ") values (?, ?, ?, ?, ?, ?, ?)";
 				
 		Object[] params = {
 			this.getNextId("contacts", "id"),

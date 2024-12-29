@@ -88,17 +88,21 @@ public class ContactsWebServices {
 	
 	@PostMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> insert(
-			@RequestParam(value = "file") MultipartFile file,
+			@RequestParam( value = "file" ) Optional<MultipartFile> file,
 			@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SerialException, SQLException {
 		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
 		
-		MultipartFile multipartFile = file;
+		MultipartFile multipartFile = null;
 		
-		byte[] profilePicBytes = multipartFile.getBytes();
-		SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
-		
-		contact.setProfilePic(profilePicBlob);
+		if (file.isPresent()) {
+			multipartFile = file.get();
+			
+			byte[] profilePicBytes = multipartFile.getBytes();
+			SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
+			
+			contact.setProfilePic(profilePicBlob);
+		}
 		
 		long recordsInserted = this.contactsService.insertContact(contact);
 		
