@@ -1,6 +1,6 @@
 package com.contacts.model;
 
-public class User {
+public class UserAccount {
 	long id;
 	String username;
 	String password;

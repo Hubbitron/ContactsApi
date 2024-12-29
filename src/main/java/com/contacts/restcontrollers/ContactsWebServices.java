@@ -7,6 +7,7 @@ import java.util.List;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -14,7 +15,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+
+import com.contacts.model.AuthenticationResponse;
+import com.contacts.helper.JwtUtil;
+import com.contacts.model.AuthenticationRequest;
 import com.contacts.model.Contact;
 import com.contacts.model.State;
 import com.contacts.service.ContactsService;
@@ -41,6 +52,31 @@ import java.util.Optional;
 @RequestMapping(value = "api")
 
 public class ContactsWebServices {
+	
+	@Autowired
+	protected AuthenticationManager authenticationManager;
+	
+	@Autowired
+	protected UserDetailsService userDetailsService;
+	
+	@Autowired
+	protected JwtUtil jwtUtil;
+	
+	@PostMapping(value = "/authenticate")
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+		}
+		catch (AuthenticationException ae) {
+			return ResponseEntity.ok(new AuthenticationResponse(StringUtils.EMPTY));
+		}
+		
+		UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+			
+		String jwt = jwtUtil.generateToken(userDetails);
+		
+		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+	}
 	
 	@Autowired
 	ContactsService contactsService;

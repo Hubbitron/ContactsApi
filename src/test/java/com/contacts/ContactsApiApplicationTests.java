@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
-import com.contacts.model.User;
+import com.contacts.model.UserAccount;
 import com.contacts.service.ContactsService;
 
 @SpringBootTest
@@ -73,7 +73,7 @@ class ContactsApiApplicationTests {
 	
 	@Test
 	public void getUser() {
-		User user = this.contactsService.getUser("hubbitron");
-		System.out.println(user.getFirstName() + " " + user.getLastName());
+		UserAccount userAccount = this.contactsService.getUser("pkim");
+		System.out.println(userAccount.getFirstName() + " " + userAccount.getLastName());
 	}
 }

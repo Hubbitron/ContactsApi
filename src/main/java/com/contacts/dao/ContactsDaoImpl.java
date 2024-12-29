@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
-import com.contacts.model.User;
+import com.contacts.model.UserAccount;
 import com.contacts.rowmappers.UserRowMapper;
 
 @Repository
@@ -176,13 +177,18 @@ public class ContactsDaoImpl implements ContactsDao {
 	}
 
 	@Override
-	public User getUser(String username) {
+	public UserAccount getUser(String username) {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("username", username);
 		String sql = "select id, username, password, role_id, first_name, last_name from users where username = ?";
 			
-		User user = this.jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
-		return user;
+		try {
+			UserAccount userAccount = this.jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
+			return userAccount;
+		} catch (DataAccessException dae)  {
+			return null;
+		}
+		
 	}	
 	
 }

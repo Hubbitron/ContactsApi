@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
-import com.contacts.model.User;
+import com.contacts.model.UserAccount;
 
 public interface ContactsDao {
 	List<Contact> getContacts(long id);
@@ -20,6 +20,6 @@ public interface ContactsDao {
 	
 	List<State> getStates();
 
-	User getUser(String username);
+	UserAccount getUser(String username);
 
 }

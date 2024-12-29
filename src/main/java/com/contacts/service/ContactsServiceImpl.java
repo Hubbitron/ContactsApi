@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.contacts.dao.ContactsDao;
 import com.contacts.model.Contact;
 import com.contacts.model.State;
-import com.contacts.model.User;
+import com.contacts.model.UserAccount;
 
 @Service("contactsService")
 public class ContactsServiceImpl implements ContactsService {
@@ -55,7 +55,7 @@ public class ContactsServiceImpl implements ContactsService {
 	}
 
 	@Override
-	public User getUser(String username) {
+	public UserAccount getUser(String username) {
 		return this.contactsDao.getUser(username);
 	}
 

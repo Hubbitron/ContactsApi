@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import java.security.Key;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,7 +68,7 @@ public class JwtUtil
 
 		try
 		{
-			claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+			claims = Jwts.parser().setSigningKey(secretKey).build().parseSignedClaims(token).getPayload();
 		}
 		catch (SignatureException e)
 		{
@@ -104,6 +108,7 @@ public class JwtUtil
 	
 	private String createToken(Map<String, Object> claims, String subject)
 	{
+		
 		String outputString = Jwts.builder().setClaims(claims).setSubject(subject)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * this.jwtExpirationIntervalMinutes))

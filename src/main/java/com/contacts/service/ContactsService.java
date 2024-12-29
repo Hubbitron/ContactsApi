@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
-import com.contacts.model.User;
+import com.contacts.model.UserAccount;
 
 public interface ContactsService {
 	List<Contact> getAllContacts();
@@ -22,7 +22,7 @@ public interface ContactsService {
 	
 	List<State> getStates();
 	
-	User getUser(String username);
+	UserAccount getUser(String username);
 	
 	
 	
