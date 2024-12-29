@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
+import com.contacts.model.User;
 import com.contacts.service.ContactsService;
 
 @SpringBootTest
@@ -67,6 +68,12 @@ class ContactsApiApplicationTests {
 		for (State state : stateList) {
 			System.out.println(state.getStateAbbr());
 		
+		}
 	}
+	
+	@Test
+	public void getUser() {
+		User user = this.contactsService.getUser("hubbitron");
+		System.out.println(user.getFirstName() + " " + user.getLastName());
 	}
 }

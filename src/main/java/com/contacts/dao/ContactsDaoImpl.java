@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
+import com.contacts.model.User;
+import com.contacts.rowmappers.UserRowMapper;
 
 @Repository
 public class ContactsDaoImpl implements ContactsDao {
@@ -172,4 +174,15 @@ public class ContactsDaoImpl implements ContactsDao {
 		}
 		return stateList;
 	}
+
+	@Override
+	public User getUser(String username) {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("username", username);
+		String sql = "select id, username, password, role_id, first_name, last_name from users where username = ?";
+			
+		User user = this.jdbcTemplate.queryForObject(sql, new UserRowMapper(), username);
+		return user;
+	}	
+	
 }

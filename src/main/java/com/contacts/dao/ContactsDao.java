@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
+import com.contacts.model.User;
 
 public interface ContactsDao {
 	List<Contact> getContacts(long id);
@@ -18,5 +19,7 @@ public interface ContactsDao {
 	Blob downloadProfilePic(long id);
 	
 	List<State> getStates();
+
+	User getUser(String username);
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.contacts.model.Contact;
 import com.contacts.model.State;
+import com.contacts.model.User;
 
 public interface ContactsService {
 	List<Contact> getAllContacts();
@@ -20,6 +21,8 @@ public interface ContactsService {
 	Blob downloadProfilePic(long id);
 	
 	List<State> getStates();
+	
+	User getUser(String username);
 	
 	
 	
