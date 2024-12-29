@@ -33,7 +33,12 @@ public class SecurityConfig {
 	    http
             .csrf(AbstractHttpConfigurer::disable) //
             .cors(AbstractHttpConfigurer::disable) //
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/api/authenticate").permitAll()
+            .authorizeHttpRequests(auth -> auth.requestMatchers(
+            		"/**"
+//            		"/api/authenticate",
+//            		"/api/contactlist",
+//            		"/api/contactedit"
+            		).permitAll()
             		.requestMatchers("/api/**").hasRole("1"));
 		
 	    return http.build();
