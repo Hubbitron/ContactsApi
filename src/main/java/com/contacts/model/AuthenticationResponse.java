@@ -2,13 +2,15 @@ package com.contacts.model;
 
 public class AuthenticationResponse {
 	
-	String jwt;
+	private final String jwt;
 
-	public String getJwt() {
-		return jwt;
+	public AuthenticationResponse(String jwt)
+	{
+		this.jwt = jwt;
 	}
 
-	public AuthenticationResponse(String jwt) {
-		this.jwt = jwt;
+	public String getJwt()
+	{
+		return jwt;
 	}
 }

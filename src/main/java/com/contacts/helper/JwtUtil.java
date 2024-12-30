@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.SecretKey;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
@@ -22,6 +24,8 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtUtil
@@ -68,11 +72,7 @@ public class JwtUtil
 
 		try
 		{
-			claims = Jwts.parser().setSigningKey(secretKey).build().parseSignedClaims(token).getPayload();
-		}
-		catch (SignatureException e)
-		{
-			System.out.println("signature exception" + e);
+			claims = Jwts.parser().verifyWith(this.getSignInKey()).build().parseSignedClaims(token).getPayload();
 		}
 		catch (MalformedJwtException e)
 		{
@@ -109,14 +109,19 @@ public class JwtUtil
 	private String createToken(Map<String, Object> claims, String subject)
 	{
 		
-		String outputString = Jwts.builder().setClaims(claims).setSubject(subject)
-				.setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * this.jwtExpirationIntervalMinutes))
-				.signWith(SignatureAlgorithm.HS256, secretKey).compact();
+		String outputString = Jwts.builder().claims(claims).subject(subject)
+				.issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * this.jwtExpirationIntervalMinutes))
+				.signWith(this.getSignInKey()).compact();
 		
 		return outputString;
 	}
 	
+    private SecretKey getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(this.secretKey);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+    
 	public Boolean validateToken(String token, UserDetails userDetails)
 	{
 		String username = StringUtils.EMPTY;
