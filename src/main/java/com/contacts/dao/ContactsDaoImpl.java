@@ -33,12 +33,15 @@ public class ContactsDaoImpl implements ContactsDao {
 	public List<Contact> getContacts(long id) {
 		List<Contact> contactList = new ArrayList<Contact>();
 		
-		Map<String, Object> paramMap = new HashMap<String, Object>();		
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		
 		String sql = "select id, last_name, middle_name, first_name, dob, state_id from contacts ";
+		
 		if (id > 0) {
 			sql += "where id = :id";
 			paramMap.put("id", id);
 		}
+		
 		sql += " order by last_name asc";
 		
 		List<Map<String, Object>> rows = this.namedParameterJdbcTemplate.queryForList(sql, paramMap);
@@ -55,6 +58,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			
 			contactList.add(contact);
 		}
+		
 		return contactList;
 	}
 
@@ -80,6 +84,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.getProfilePic(),
 			contact.getId()
 		};
+		
 		recordsUpdated = this.jdbcTemplate.update(sql, params);
 		return recordsUpdated;
 	}
@@ -105,7 +110,9 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.getStateId(),
 			contact.getProfilePic()
 		};
+		
 		recordsInserted = this.jdbcTemplate.update(sql, params);
+		
 		return recordsInserted;
 	}
 
@@ -113,6 +120,7 @@ public class ContactsDaoImpl implements ContactsDao {
 		String sql = "select max(" + primaryKeyName + ") id from " + tableName;
 		Long id = this.jdbcTemplate.queryForObject(sql, Long.class);
 		long nextId = id == null ? 1 : id.longValue() + 1;
+		
 		return nextId;
 	}
 
@@ -123,7 +131,9 @@ public class ContactsDaoImpl implements ContactsDao {
 		Object[] params = {
 			id
 		};
+		
 		recordsDeleted = this.jdbcTemplate.update(sql, params);
+		
 		return recordsDeleted;
 	}
 	
@@ -132,15 +142,16 @@ public class ContactsDaoImpl implements ContactsDao {
 		Contact contact = new Contact();
 		Blob profilepic = resultSet.getBlob("profile_pic");
 		contact.setTempBlob(profilepic);
-		return contact;
 		
+		return contact;
 	}
 	
 	
 	@Override
 	public Blob downloadProfilePic(long id) {
 		String sql = "select profile_pic from contacts where id = ?";
-		List<Contact> contactList = this.jdbcTemplate.query(sql,
+		List<Contact> contactList = this.jdbcTemplate.query(
+				sql,
 				(resultSet, i) -> this.getBlobFromContact(resultSet),
 				id);
 				
@@ -169,7 +180,6 @@ public class ContactsDaoImpl implements ContactsDao {
 			state.setId(Long.parseLong(row.get("id").toString()));
 			state.setStateAbbr(row.get("state_abbr").toString());
 			state.setStateName(row.get("state_name").toString());
-;
 			
 			stateList.add(state);
 		}
@@ -187,8 +197,6 @@ public class ContactsDaoImpl implements ContactsDao {
 			return userAccount;
 		} catch (DataAccessException dae)  {
 			return null;
-		}
-		
-	}	
-	
+		}		
+	}		
 }

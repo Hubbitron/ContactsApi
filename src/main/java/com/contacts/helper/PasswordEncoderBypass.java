@@ -13,5 +13,4 @@ public class PasswordEncoderBypass implements PasswordEncoder {
 	public boolean matches(CharSequence charSequence, String s) {
 		return charSequence.toString().equals(s);
 	}
-
 }

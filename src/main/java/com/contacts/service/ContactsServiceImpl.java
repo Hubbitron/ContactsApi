@@ -58,5 +58,4 @@ public class ContactsServiceImpl implements ContactsService {
 	public UserAccount getUser(String username) {
 		return this.contactsDao.getUser(username);
 	}
-
 }

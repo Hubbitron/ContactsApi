@@ -9,15 +9,15 @@ import com.contacts.model.UserAccount;
 
 public interface ContactsDao {
 	List<Contact> getContacts(long id);
-	
+
 	long updateContact(Contact contact);
-	
+
 	long insertContact(Contact contact);
-	
+
 	long deleteContact(long id);
-	
+
 	Blob downloadProfilePic(long id);
-	
+
 	List<State> getStates();
 
 	UserAccount getUser(String username);

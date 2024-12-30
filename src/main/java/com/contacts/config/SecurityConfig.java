@@ -21,13 +21,13 @@ import com.contacts.filter.JwtRequestFilter;
 public class SecurityConfig {
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		return new PasswordEncoderBypass();
 	}
 	
 	
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
 	
@@ -36,7 +36,7 @@ public class SecurityConfig {
 
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	    http
 	    	.formLogin(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)

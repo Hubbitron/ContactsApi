@@ -123,7 +123,7 @@ public class ContactsWebServices {
 	
 	@PostMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> insert(
-			@RequestParam( value = "file" ) Optional<MultipartFile> file,
+			@RequestParam Optional<MultipartFile> file,
 			@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SerialException, SQLException {
 		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
@@ -146,7 +146,7 @@ public class ContactsWebServices {
 	
 	@PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Contact> update (
-		@RequestParam( value = "file" ) Optional<MultipartFile> file,
+		@RequestParam Optional<MultipartFile> file,
 		@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SQLException {
 		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
@@ -161,13 +161,10 @@ public class ContactsWebServices {
 			
 			contact.setProfilePic(profilePicBlob);
 		}
-			
 
-		
 		long recordsUpdated = this.contactsService.updateContact(contact);
 		
-		return new ResponseEntity<Contact>(contact, HttpStatus.OK);
-		
+		return new ResponseEntity<Contact>(contact, HttpStatus.OK);		
 	}
 	
 	@DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -183,7 +180,6 @@ public class ContactsWebServices {
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<Void>(HttpStatus.OK);	
-		
+		return new ResponseEntity<Void>(HttpStatus.OK);		
 	}
 }
