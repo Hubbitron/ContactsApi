@@ -40,7 +40,7 @@ public class SecurityConfig {
 	    http
 	    	.formLogin(AbstractHttpConfigurer::disable)
             .csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
+            .cors(ahc -> ahc.configure(http))
             //.headers(AbstractHttpConfigurer::disable)
             .securityMatcher("/api/**")
             .authorizeHttpRequests(auth -> auth
@@ -61,6 +61,7 @@ public class SecurityConfig {
 		
 	    http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
 
 	    return http.build();
 	}
