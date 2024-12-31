@@ -35,7 +35,7 @@ public class ContactsDaoImpl implements ContactsDao {
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		
-		String sql = "select id, last_name, middle_name, first_name, dob, state_id from contacts ";
+		String sql = "select id, last_name, middle_name, first_name, dob, address_line_1, state_id from contacts ";
 		
 		if (id > 0) {
 			sql += "where id = :id";
@@ -54,6 +54,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.setMiddleName(row.get("middle_name").toString());
 			contact.setFirstName(row.get("first_name").toString());
 			contact.setDob((Date)row.get("dob"));
+			contact.setAddressLine1(row.get("address_line_1").toString());
 			contact.setStateId(Long.parseLong(row.get("state_id").toString()));
 			
 			contactList.add(contact);
@@ -70,8 +71,9 @@ public class ContactsDaoImpl implements ContactsDao {
 				+ " set last_name = ?,"
 				+ " middle_name = ?,"
 				+ " first_name = ?,"
-				+ " dob = ?, "
-				+ " state_id = ?, "
+				+ " dob = ?,"
+				+ "address_line_1 = ?,"
+				+ " state_id = ?,"
 				+ " profile_pic = ?"
 				+ " where id = ?";
 		
@@ -80,6 +82,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.getMiddleName(),
 			contact.getFirstName(),
 			contact.getDob(),
+			contact.getAddressLine1(),
 			contact.getStateId(),
 			contact.getProfilePic(),
 			contact.getId()
@@ -97,9 +100,10 @@ public class ContactsDaoImpl implements ContactsDao {
 				+ " middle_name,"
 				+ " first_name,"
 				+ " dob,"
+				+ "address_line_1,"
 				+ " state_id,"
 				+ " profile_pic"
-				+ ") values (?, ?, ?, ?, ?, ?, ?)";
+				+ ") values (?, ?, ?, ?, ?, ?, ?, ?)";
 				
 		Object[] params = {
 			this.getNextId("contacts", "id"),
@@ -107,6 +111,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.getMiddleName(),
 			contact.getFirstName(),
 			contact.getDob(),
+			contact.getAddressLine1(),
 			contact.getStateId(),
 			contact.getProfilePic()
 		};

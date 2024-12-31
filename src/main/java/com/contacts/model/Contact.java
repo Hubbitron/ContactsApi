@@ -13,6 +13,7 @@ public class Contact {
 	String firstName;
 	String middleName;
 	Date dob;
+	String addressLine1;
 	long stateId;
 	SerialBlob profilePic;
 	Blob tempBlob; // temporary field for downloads
@@ -55,6 +56,14 @@ public class Contact {
 
 	public void setDob(Date dob) {
 		this.dob = dob;
+	}
+
+	public String getAddressLine1() {
+		return addressLine1;
+	}
+
+	public void setAddressLine1(String addressLine1) {
+		this.addressLine1 = addressLine1;
 	}
 
 	public long getStateId() {
