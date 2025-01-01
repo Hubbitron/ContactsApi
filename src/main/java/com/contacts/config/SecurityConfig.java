@@ -50,6 +50,10 @@ public class SecurityConfig {
         			,"/api/delete/{id:\\d+}"
         			,"/api/update"
         			,"/api/insert"
+    				,"/api/getAll"
+    				,"/api/getUser"
+    				,"/api/getProfilePic/{id:\\d+}"   				
+
         		).hasAnyAuthority("1")
         		
         		.requestMatchers(

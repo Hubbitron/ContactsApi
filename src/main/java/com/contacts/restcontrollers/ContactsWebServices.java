@@ -41,6 +41,7 @@ import com.contacts.helper.JwtUtil;
 import com.contacts.model.AuthenticationRequest;
 import com.contacts.model.Contact;
 import com.contacts.model.State;
+import com.contacts.model.UserAccount;
 import com.contacts.service.ContactsService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -122,6 +123,20 @@ public class ContactsWebServices {
 		return new ResponseEntity<Contact>(contact, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/getUser/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserAccount> getUser(@PathVariable String username){
+		if(username.length() == 0) {
+			return new ResponseEntity<UserAccount>(HttpStatus.NOT_FOUND);
+		}
+	
+		UserAccount useraccount = this.contactsService.getUser(username);
+		if (useraccount == null) {
+			return new ResponseEntity<UserAccount>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<UserAccount>(useraccount, HttpStatus.OK);
+	}
+
 	@PostMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> insert(
 			@RequestParam( value = "file" ) Optional<MultipartFile> file,
