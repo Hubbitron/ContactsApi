@@ -129,12 +129,14 @@ public class ContactsWebServices {
 			return new ResponseEntity<UserAccount>(HttpStatus.NOT_FOUND);
 		}
 	
-		UserAccount useraccount = this.contactsService.getUser(username);
-		if (useraccount == null) {
+		UserAccount userAccount = this.contactsService.getUser(username);
+		if (userAccount == null) {
 			return new ResponseEntity<UserAccount>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<UserAccount>(useraccount, HttpStatus.OK);
+		userAccount.setPassword(StringUtils.EMPTY);
+		
+		return new ResponseEntity<UserAccount>(userAccount, HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/insert", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
