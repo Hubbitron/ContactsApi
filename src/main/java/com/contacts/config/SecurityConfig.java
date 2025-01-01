@@ -1,5 +1,6 @@
 package com.contacts.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -7,9 +8,12 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.contacts.filter.JwtRequestFilter;
 import com.contacts.helper.PasswordEncoderBypass;
 
 @Configuration
@@ -17,29 +21,51 @@ import com.contacts.helper.PasswordEncoderBypass;
 public class SecurityConfig {
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		return new PasswordEncoderBypass();
 	}
 	
+	@Autowired
+	JwtRequestFilter jwtRequestFilter;
 	
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
 		return authConfig.getAuthenticationManager();
 	}
 	
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	    http
-            .csrf(AbstractHttpConfigurer::disable) //
-            .cors(AbstractHttpConfigurer::disable) //
-            .authorizeHttpRequests(auth -> auth.requestMatchers(
-            		"/**"
-//            		"/api/authenticate",
-//            		"/api/contactlist",
-//            		"/api/contactedit"
-            		).permitAll()
-            		.requestMatchers("/api/**").hasRole("1"));
+	    	.formLogin(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configure(http))
+            .securityMatcher("/api/**")
+            .authorizeHttpRequests(auth -> auth
+            		
+        		.requestMatchers(
+    				"/api/update"
+        			,"/api/getStates"
+        			,"/api/getSingle/{id:\\d+}"
+        			,"/api/delete/{id:\\d+}"
+        			,"/api/update"
+        			,"/api/insert"
+        		).hasAnyAuthority("1")
+        		
+        		.requestMatchers(
+    				"/api/getAll"
+    				,"/api/getProfilePic/{id:\\d+}"   				
+        		).hasAnyAuthority("2")
+        		
+        		.requestMatchers(
+    				"/api/authenticate"
+				).permitAll()
+        		
+        		.anyRequest().authenticated()
+    		);
+	    
+	    http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	    http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		
 	    return http.build();
 	}

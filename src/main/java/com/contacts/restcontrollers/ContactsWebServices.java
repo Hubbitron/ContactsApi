@@ -49,7 +49,7 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "api")
+@RequestMapping(value = "/api")
 
 public class ContactsWebServices {
 	
