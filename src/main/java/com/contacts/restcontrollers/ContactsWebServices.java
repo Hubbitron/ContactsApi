@@ -143,7 +143,7 @@ public class ContactsWebServices {
 			@RequestParam String json) throws JsonParseException, JsonMappingException, IOException, SerialException, SQLException {
 		
 		Contact contact = new ObjectMapper().readValue(json, Contact.class);
-		
+			
 		MultipartFile multipartFile = null;
 		
 		if (file.isPresent()) {

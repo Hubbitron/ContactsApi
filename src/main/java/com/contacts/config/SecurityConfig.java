@@ -44,26 +44,23 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
             		
         		.requestMatchers(
+    				"/api/authenticate"
+				).permitAll()
+            		
+        		.requestMatchers(
+    				"/api/getAll"
+    				,"/api/getProfilePic/{id:\\d+}"   				
+        		).hasAnyAuthority("1", "2")
+                	
+        		.requestMatchers(
     				"/api/update"
         			,"/api/getStates"
         			,"/api/getSingle/{id:\\d+}"
         			,"/api/delete/{id:\\d+}"
         			,"/api/update"
         			,"/api/insert"
-    				,"/api/getAll"
     				,"/api/getUser"
-    				,"/api/getProfilePic/{id:\\d+}"   				
-
         		).hasAnyAuthority("1")
-        		
-        		.requestMatchers(
-    				"/api/getAll"
-    				,"/api/getProfilePic/{id:\\d+}"   				
-        		).hasAnyAuthority("2")
-        		
-        		.requestMatchers(
-    				"/api/authenticate"
-				).permitAll()
         		
         		.anyRequest().authenticated()
     		);
