@@ -44,20 +44,29 @@ public class SecurityConfig {
             //.headers(AbstractHttpConfigurer::disable)
             .securityMatcher("/api/**")
             .authorizeHttpRequests(auth -> auth
-            		.requestMatchers(
-            				"/api/getAll"
-                  			,"/api/getSingle/{id:\\d+}"
-                  			,"/api/insert"
-                  			,"/api/update"
-	              			,"/api/delete/{id:\\d+}"
-	              			,"/api/getStates"
-	              			,"/api/getProfilePic/{id:\\d+}"
-            		).hasAnyAuthority("1", "2")
-            		.requestMatchers(
-            				"/api/authenticate"
-            		).permitAll()
-            		.anyRequest().authenticated()
-            	);
+            		
+        		.requestMatchers(
+        				"/api/getAll"
+              			,"/api/getSingle/{id:\\d+}"
+              			,"/api/insert"
+              			,"/api/update"
+              			,"/api/delete/{id:\\d+}"
+              			,"/api/getStates"
+        				,"/api/getAll"
+              			,"/api/getProfilePic/{id:\\d+}"
+        		).hasAnyAuthority("1")
+        		
+        		.requestMatchers(
+        				"/api/getAll"
+              			,"/api/getProfilePic/{id:\\d+}"
+        		).hasAnyAuthority("2")
+
+        		.requestMatchers(
+        				"/api/authenticate"
+        		).permitAll()
+        		
+        		.anyRequest().authenticated()
+            );
 		
 	    http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
