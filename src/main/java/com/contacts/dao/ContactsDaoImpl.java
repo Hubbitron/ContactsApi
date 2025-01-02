@@ -169,7 +169,6 @@ public class ContactsDaoImpl implements ContactsDao {
 			state.setId(Long.parseLong(row.get("id").toString()));
 			state.setStateAbbr(row.get("state_abbr").toString());
 			state.setStateName(row.get("state_name").toString());
-;
 			
 			stateList.add(state);
 		}
