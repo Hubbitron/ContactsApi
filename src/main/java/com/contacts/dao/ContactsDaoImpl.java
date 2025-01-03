@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,7 +35,7 @@ public class ContactsDaoImpl implements ContactsDao {
 		List<Contact> contactList = new ArrayList<Contact>();
 		
 		Map<String, Object> paramMap = new HashMap<String, Object>();		
-		String sql = "select id, last_name, middle_name, first_name, dob, state_id from contacts ";
+		String sql = "select id, last_name, middle_name, first_name, dob, state_id, profile_pic_filename from contacts ";
 		if (id > 0) {
 			sql += "where id = :id";
 			paramMap.put("id", id);
@@ -52,9 +53,11 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.setFirstName(row.get("first_name").toString());
 			contact.setDob((Date)row.get("dob"));
 			contact.setStateId(Long.parseLong(row.get("state_id").toString()));
+			contact.setProfilePicFilename(row.get("profile_pic_filename") != null ? row.get("profile_pic_filename").toString(): StringUtils.EMPTY);
 			
 			contactList.add(contact);
 		}
+		
 		return contactList;
 	}
 
@@ -68,7 +71,8 @@ public class ContactsDaoImpl implements ContactsDao {
 				+ " first_name = ?,"
 				+ " dob = ?, "
 				+ " state_id = ?, "
-				+ " profile_pic = ?"
+				+ " profile_pic = ?,"
+				+ " profile_pic_filename = ?"
 				+ " where id = ?";
 		
 		Object[] params = {
@@ -78,6 +82,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.getDob(),
 			contact.getStateId(),
 			contact.getProfilePic(),
+			contact.getProfilePicFilename(),
 			contact.getId()
 		};
 		recordsUpdated = this.jdbcTemplate.update(sql, params);
@@ -93,8 +98,9 @@ public class ContactsDaoImpl implements ContactsDao {
 				+ " first_name,"
 				+ " dob,"
 				+ " state_id,"
-				+ " profile_pic"
-				+ ") values (?, ?, ?, ?, ?, ?, ?)";
+				+ " profile_pic,"
+				+ " profile_pic_filename"
+				+ ") values (?, ?, ?, ?, ?, ?, ?, ?)";
 				
 		Object[] params = {
 			this.getNextId("contacts", "id"),
@@ -103,9 +109,12 @@ public class ContactsDaoImpl implements ContactsDao {
 			contact.getFirstName(),
 			contact.getDob(),
 			contact.getStateId(),
-			contact.getProfilePic()
+			contact.getProfilePic(),
+			contact.getProfilePicFilename()
 		};
+		
 		recordsInserted = this.jdbcTemplate.update(sql, params);
+		
 		return recordsInserted;
 	}
 
@@ -172,6 +181,7 @@ public class ContactsDaoImpl implements ContactsDao {
 			
 			stateList.add(state);
 		}
+		
 		return stateList;
 	}
 
@@ -187,7 +197,5 @@ public class ContactsDaoImpl implements ContactsDao {
 		} catch (DataAccessException dae)  {
 			return null;
 		}
-		
 	}	
-	
 }

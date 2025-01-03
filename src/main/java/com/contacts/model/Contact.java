@@ -16,6 +16,7 @@ public class Contact {
 	long stateId;
 	SerialBlob profilePic;
 	Blob tempBlob; //temporary field for downloads
+	String profilePicFilename;
 	
 	public long getId() {
 		return id;
@@ -64,5 +65,13 @@ public class Contact {
 	}
 	public void setTempBlob(Blob tempBlob) {
 		this.tempBlob = tempBlob;
+	}
+	
+	public String getProfilePicFilename() {
+		return profilePicFilename;
+	}
+	
+	public void setProfilePicFilename(String profilePicFilename) {
+		this.profilePicFilename = profilePicFilename;
 	}
 }

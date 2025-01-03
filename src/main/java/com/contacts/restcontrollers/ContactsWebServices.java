@@ -84,6 +84,7 @@ public class ContactsWebServices {
 	
 	@GetMapping(value = "/getProfilePic/{id}")
 	public ResponseEntity<Resource> getProfilePic(@PathVariable Long id) throws SQLException {
+		Contact contact = this.contactsService.getOneContact(id);
 		Blob profilePic = this.contactsService.downloadProfilePic(id);
 		byte[] profilePicBytes = profilePic.getBytes(1, (int)profilePic.length());
 		profilePic.free();
@@ -91,7 +92,7 @@ public class ContactsWebServices {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.MULTIPART_MIXED);
 		headers.add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
-		headers.add("Content-Disposition", "inline; filename = download.png");
+		headers.add("Content-Disposition", "inline; filename=" + contact.getProfilePicFilename());
 		return ResponseEntity.ok().headers(headers).contentLength(profilePicBytes.length).body(resource);
 	}
 	
@@ -155,7 +156,9 @@ public class ContactsWebServices {
 			SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
 			
 			contact.setProfilePic(profilePicBlob);
+			contact.setProfilePicFilename(multipartFile.getOriginalFilename());
 		}
+		
 		
 		long recordsInserted = this.contactsService.insertContact(contact);
 		
@@ -178,6 +181,7 @@ public class ContactsWebServices {
 			SerialBlob profilePicBlob = new SerialBlob(profilePicBytes);	
 			
 			contact.setProfilePic(profilePicBlob);
+			contact.setProfilePicFilename(multipartFile.getOriginalFilename());
 		}
 			
 
